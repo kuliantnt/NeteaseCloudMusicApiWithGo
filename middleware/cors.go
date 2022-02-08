@@ -16,6 +16,7 @@ func Cors() gin.HandlerFunc {
 	if gin.Mode() == gin.ReleaseMode {
 		// 生产环境需要配置跨域域名，否则403
 		config.AllowOrigins = []string{"http://www.example.com"}
+		config.AllowCredentials = true
 	} else {
 		// 测试环境下模糊匹配本地开头的请求
 		config.AllowOriginFunc = func(origin string) bool {

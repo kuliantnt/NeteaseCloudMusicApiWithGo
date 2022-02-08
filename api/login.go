@@ -6,7 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 获取登录状态
+// LoginStatus 获取登录状态
+//  @param c
 func LoginStatus(c *gin.Context) {
 	var service service.LoginStatusService
 	if err := c.ShouldBind(&service); err == nil {
@@ -17,7 +18,8 @@ func LoginStatus(c *gin.Context) {
 	}
 }
 
-// 手机登录
+// LoginCellphone 手机登录
+//  @param c
 func LoginCellphone(c *gin.Context) {
 	var service service.LoginCellphoneService
 	if err := c.ShouldBind(&service); err == nil {
@@ -28,7 +30,8 @@ func LoginCellphone(c *gin.Context) {
 	}
 }
 
-// 邮箱登录
+// LoginEmail 邮箱登录
+//  @param c
 func LoginEmail(c *gin.Context) {
 	var service service.LoginEmailService
 	if err := c.ShouldBind(&service); err == nil {
@@ -39,7 +42,8 @@ func LoginEmail(c *gin.Context) {
 	}
 }
 
-// 刷新登录
+// LoginRefresh 刷新登录
+//  @param c
 func LoginRefresh(c *gin.Context) {
 	var service service.LoginRefreshService
 	if err := c.ShouldBind(&service); err == nil {
@@ -50,7 +54,8 @@ func LoginRefresh(c *gin.Context) {
 	}
 }
 
-// 退出登录
+// Logout 退出登录
+//  @param c
 func Logout(c *gin.Context) {
 	var service service.LogoutService
 	if err := c.ShouldBind(&service); err == nil {

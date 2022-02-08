@@ -34,6 +34,7 @@ const (
 )
 
 // CheckLogin 检查登录
+//  @return Response
 func CheckLogin() Response {
 	return Response{
 		Code: CodeCheckLogin,

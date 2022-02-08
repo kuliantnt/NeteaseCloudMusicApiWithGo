@@ -29,6 +29,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("login/cellphone", api.LoginCellphone)
 		v1.GET("login", api.LoginEmail)
 		v1.GET("login/refresh", api.LoginRefresh)
+		v1.GET("login/qr/key", api.LoginQrkey)
 		v1.GET("captcha/sent", api.CaptchaSent)
 		v1.GET("captcha/verify", api.CaptchaVerify)
 		v1.GET("register/cellphone", api.RegisterCellphone)
