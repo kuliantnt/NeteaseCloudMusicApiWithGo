@@ -1,9 +1,11 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	"regexp"
-	"singo/util"
+
+	"github.com/lianlian/singo/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 type RelatedPlaylistService struct {

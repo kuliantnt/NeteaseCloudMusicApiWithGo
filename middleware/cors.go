@@ -8,10 +8,11 @@ import (
 )
 
 // Cors 跨域配置
+//  @return gin.HandlerFunc
 func Cors() gin.HandlerFunc {
 	config := cors.DefaultConfig()
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
-	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Cookie","X-Requested-With"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Cookie", "X-Requested-With"}
 	if gin.Mode() == gin.ReleaseMode {
 		// 生产环境需要配置跨域域名，否则403
 		config.AllowOrigins = []string{"http://www.example.com"}

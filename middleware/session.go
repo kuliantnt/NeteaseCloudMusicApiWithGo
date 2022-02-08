@@ -7,6 +7,8 @@ import (
 )
 
 // Session 初始化session
+//  @param secret
+//  @return gin.HandlerFunc
 func Session(secret string) gin.HandlerFunc {
 	store := cookie.NewStore([]byte(secret))
 	//Also set Secure: true if using SSL, you should though

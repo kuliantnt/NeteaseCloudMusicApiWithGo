@@ -1,8 +1,9 @@
 package api
 
 import (
+	"github.com/lianlian/singo/service"
+
 	"github.com/gin-gonic/gin"
-	"singo/service"
 )
 
 // 首页-发现 block page

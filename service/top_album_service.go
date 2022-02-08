@@ -1,11 +1,13 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"singo/util"
 	"strconv"
 	"time"
+
+	"github.com/lianlian/singo/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 type TopAlbumService struct {

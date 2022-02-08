@@ -1,8 +1,9 @@
 package service
 
 import (
+	"github.com/lianlian/singo/util"
+
 	"github.com/gin-gonic/gin"
-	"singo/util"
 )
 
 type DjCategoryExcludehotService struct {

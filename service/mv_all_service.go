@@ -2,8 +2,10 @@ package service
 
 import (
 	"encoding/json"
+
+	"github.com/lianlian/singo/util"
+
 	"github.com/gin-gonic/gin"
-	"singo/util"
 )
 
 type MvAllService struct {

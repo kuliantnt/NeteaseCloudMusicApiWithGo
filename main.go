@@ -1,8 +1,8 @@
 package main
 
 import (
-	"singo/conf"
-	"singo/server"
+	"github.com/lianlian/singo/conf"
+	"github.com/lianlian/singo/server"
 )
 
 func main() {

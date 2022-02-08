@@ -2,13 +2,15 @@ package server
 
 import (
 	"os"
-	"singo/api"
-	"singo/middleware"
+
+	"github.com/lianlian/singo/api"
+	"github.com/lianlian/singo/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 // NewRouter 路由配置
+//  @return *gin.Engine
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 
@@ -20,6 +22,7 @@ func NewRouter() *gin.Engine {
 	// 路由
 	v1 := r.Group("/")
 	{
+		//ping
 		v1.POST("ping", api.Ping)
 
 		v1.GET("login/status", api.LoginStatus)

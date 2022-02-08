@@ -1,13 +1,14 @@
 package service
 
 import (
+	"github.com/lianlian/singo/util"
+
 	"github.com/gin-gonic/gin"
-	"singo/util"
 )
 
 type CommentFloorService struct {
 	ParentCommentId string `json:"parentCommentId" form:"parentCommentId"`
-	Limit           string `json:"type" form:"limit"`
+	Limit           string `json:"limit" form:"limit"`
 	Type            string `json:"type" form:"type"`
 	Id              string `json:"id" form:"id"`
 	Time            string `json:"time" form:"time"`

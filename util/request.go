@@ -5,7 +5,6 @@ import (
 	"compress/zlib"
 	"encoding/json"
 	"fmt"
-	"github.com/asmcos/requests"
 	"io"
 	"math/rand"
 	"net/http"
@@ -13,8 +12,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/asmcos/requests"
 )
 
+// Options 选项结构
 type Options struct {
 	Crypto  string
 	Ua      string
@@ -23,6 +25,9 @@ type Options struct {
 	Url     string
 }
 
+// chooseUserAgent 随机选择用户的agent
+//  @param ua 浏览器标识
+//  @return string
 func chooseUserAgent(ua string) string {
 	userAgentList := []string{
 		"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
@@ -41,6 +46,7 @@ func chooseUserAgent(ua string) string {
 		"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586",
 	}
 
+	//设置种子数
 	rand.Seed(time.Now().UnixNano())
 	index := 0
 	if ua == "" {
@@ -53,11 +59,24 @@ func chooseUserAgent(ua string) string {
 	return userAgentList[index]
 }
 
+// CreateRequest 创建一个请求
+//  @param method 请求方法
+//  @param url 请求地址
+//  @param data json数据
+//  @param options 请求结构
+//  @return map[string]interface{} 响应
+//  @return []*http.Cookie cookie
 func CreateRequest(method string, url string, data map[string]string, options *Options) (map[string]interface{}, []*http.Cookie) {
 	req := requests.Requests()
 	req.Header.Set("User-Agent", chooseUserAgent(options.Ua))
+
+	// csrfToken 跨站请求伪造保护
 	csrfToken := ""
+
+	// music_U todo
 	music_U := ""
+
+	// answer 响应
 	answer := map[string]interface{}{}
 
 	if method == "POST" {
@@ -68,6 +87,8 @@ func CreateRequest(method string, url string, data map[string]string, options *O
 	}
 	if options.Cookies != nil {
 		for _, cookie := range options.Cookies {
+
+			// req 设置cookie
 			req.SetCookie(cookie)
 			if cookie.Name == "__csrf" {
 				csrfToken = cookie.Value
@@ -77,18 +98,19 @@ func CreateRequest(method string, url string, data map[string]string, options *O
 			}
 		}
 	}
-	if options.Crypto == "weapi" {
+
+	if options.Crypto == "weapi" { //如果 交互地址时weapi的话
 		data["csrf_token"] = csrfToken
-		data = Weapi(data)
-		reg, _ := regexp.Compile(`/\w*api/`)
+		data = Weapi(data)                   //加密
+		reg, _ := regexp.Compile(`/\w*api/`) //将所有xxxapi替换为weapi
 		url = reg.ReplaceAllString(url, "/weapi/")
-	} else if options.Crypto == "linuxapi" {
+	} else if options.Crypto == "linuxapi" { //如果 加密方法为linuxapi的话
 		linuxApiData := make(map[string]interface{}, 3)
 		linuxApiData["method"] = method
 		reg, _ := regexp.Compile(`/\w*api/`)
-		linuxApiData["url"] = reg.ReplaceAllString(url, "/api/")
+		linuxApiData["url"] = reg.ReplaceAllString(url, "/api/") //将所有xxxapi替换为weapi
 		linuxApiData["params"] = data
-		data = Linuxapi(linuxApiData)
+		data = Linuxapi(linuxApiData) //加密
 		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36")
 		url = "https://music.163.com/api/linux/forward"
 	} else if options.Crypto == "eapi" {
@@ -151,7 +173,7 @@ func CreateRequest(method string, url string, data map[string]string, options *O
 	if err != nil {
 		//fmt.Println(string(body))
 		// 可能是纯页面
-		if strings.Index(string(body), "<!DOCTYPE html>") != -1 {
+		if strings.Contains(string(body), "<!DOCTYPE html>") {
 			answer["code"] = 200
 			answer["html"] = string(body)
 			return answer, cookies

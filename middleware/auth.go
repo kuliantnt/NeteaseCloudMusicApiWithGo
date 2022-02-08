@@ -1,14 +1,15 @@
 package middleware
 
 import (
-	"singo/model"
-	"singo/serializer"
+	"github.com/lianlian/singo/model"
+	"github.com/lianlian/singo/serializer"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 // CurrentUser 获取登录用户
+//  @return gin.HandlerFunc
 func CurrentUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -24,6 +25,7 @@ func CurrentUser() gin.HandlerFunc {
 }
 
 // AuthRequired 需要登录
+//  @return gin.HandlerFunc
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if user, _ := c.Get("user"); user != nil {

@@ -2,7 +2,8 @@ package conf
 
 import (
 	"os"
-	"singo/util"
+
+	"github.com/lianlian/singo/util"
 
 	"github.com/joho/godotenv"
 )

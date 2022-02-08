@@ -2,9 +2,11 @@ package service
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"singo/util"
 	"strings"
+
+	"github.com/lianlian/singo/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 /*

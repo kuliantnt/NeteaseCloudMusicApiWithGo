@@ -1,3 +1,4 @@
+// package 工具类
 package util
 
 import (
@@ -10,15 +11,20 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
-	"github.com/forgoer/openssl"
 	"math/big"
 	"strings"
+
+	"github.com/forgoer/openssl"
 )
 
 var iv = []byte("0102030405060708")
 var presetKey = []byte("0CoJUm6Qyw8W8jud")
+
+// linuxapiKey linuxAPI加密固定key
 var linuxapiKey = []byte("rFgB&h#%2?^eDg:Q")
 var stdChars = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+
+// publicKey 公钥
 var publicKey = []byte("-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgtQn2JZ34ZC28NWYpAUd98iZ37BUrX/aKzmFbt7clFSs6sXqHauqKWqdtLkF2KexO40H1YTX8z2lSgBBOAxLsvaklV8k4cBFK9snQXE9/DDaFt6Rr7iVZMldczhC0JNgTz+SHXT6CBHuX3e9SdB1Ua44oncaTWz7OBGLbCiK45wIDAQAB\n-----END PUBLIC KEY-----")
 var eapiKey = []byte("e82ckenh8dichen8")
 
@@ -45,8 +51,15 @@ func aesEncryptECB(buffer []byte, key []byte) []byte {
 	//fmt.Println(string(dst)) // 123456
 }
 
+// NewLen16Rand 16 位随机数生成
+//  @return []byte 随机字节
+//  @return []byte 随机字节取反
 func NewLen16Rand() ([]byte, []byte) {
+
+	// randByte 随机字节
 	randByte := make([]byte, 16)
+
+	//随机字节取反
 	randByteReverse := make([]byte, 16)
 	for i := 0; i < 16; i++ {
 		result, _ := rand.Int(rand.Reader, big.NewInt(62))
@@ -56,6 +69,12 @@ func NewLen16Rand() ([]byte, []byte) {
 	return randByte, randByteReverse
 }
 
+// aesEncrypt AES加密
+//  @param buffer 要加密的内容
+//  @param mod 模式 cbc/ecb
+//  @param key 私钥
+//  @param ivv 偏移量
+//  @return []byte 密文
 func aesEncrypt(buffer []byte, mod string, key []byte, ivv []byte) []byte {
 	if mod == "cbc" {
 		return aesEncryptCBC(buffer, key, ivv)
@@ -65,9 +84,14 @@ func aesEncrypt(buffer []byte, mod string, key []byte, ivv []byte) []byte {
 	return nil
 }
 
+// rsaEncrypt RSA加密
+//  @param buffer 加密的内容
+//  @param key 公钥
+//  @return []byte 密文
 func rsaEncrypt(buffer []byte, key []byte) []byte {
+	// buffers []byte 初始创建112 最大容量128
 	buffers := make([]byte, 128-16, 128)
-	buffers = append(buffers, buffer...)
+	buffers = append(buffers, buffer...) //合并切片
 	block, _ := pem.Decode(key)
 	if block == nil {
 		return nil
@@ -81,31 +105,32 @@ func rsaEncrypt(buffer []byte, key []byte) []byte {
 
 	// 加密 因为网易采用的是无padding加密故直接进行计算
 	c := new(big.Int).SetBytes([]byte(buffers))
+	//计算
 	encryptedBytes := c.Exp(c, big.NewInt(int64(pub.E)), pub.N).Bytes()
 	return encryptedBytes
-	////加密
-	//a,err:=rsa.EncryptPKCS1v15(rand.Reader, pub, buffers)
-	//if err!=nil{
-	//	fmt.Println(err.Error())
-	//}
-	//return a
 }
 
+// Weapi Weapi方式加密
+//  @param data 数据
+//  @return map 加密结果
 func Weapi(data map[string]string) map[string]string {
-	text, _ := json.Marshal(data)
-	//fmt.Println(string(text))
-	secretKey, reSecretKey := NewLen16Rand()
-	//secretKey,_=hex.DecodeString("3554324955624839667a7679634f3372")
-	//reSecretKey,_=hex.DecodeString("72334f6379767a663948625549325435")
-	weapiType := make(map[string]string, 2)
-	weapiType["params"] = base64.StdEncoding.EncodeToString(aesEncrypt([]byte(base64.StdEncoding.EncodeToString(aesEncrypt(text, "cbc", presetKey, iv))), "cbc", reSecretKey, iv))
+	text, _ := json.Marshal(data)            //生成json格式
+	secretKey, reSecretKey := NewLen16Rand() //生成长度为16的随机数
+	weapiType := make(map[string]string, 2)  //生成长度为2的map
+	weapiType["params"] = base64.StdEncoding.EncodeToString(
+		aesEncrypt([]byte(base64.StdEncoding.EncodeToString(
+			aesEncrypt(text, "cbc", presetKey, iv))), "cbc", reSecretKey, iv))
 	weapiType["encSecKey"] = hex.EncodeToString(rsaEncrypt(secretKey, publicKey))
 	return weapiType
 }
 
+// Linuxapi  LinuxAPI方式加密
+//  @param data 要加密的数据
+//  @return map linuxapiType
 func Linuxapi(data map[string]interface{}) map[string]string {
-	text, _ := json.Marshal(data)
+	text, _ := json.Marshal(data) //生成json
 	linuxapiType := make(map[string]string, 1)
+	//使用aes ecb 方式加密 生成hex
 	linuxapiType["eparams"] = strings.ToUpper(hex.EncodeToString(aesEncrypt(text, "ecb", linuxapiKey, nil)))
 	return linuxapiType
 }

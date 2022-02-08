@@ -2,9 +2,11 @@ package service
 
 import (
 	"encoding/hex"
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"singo/util"
+
+	"github.com/lianlian/singo/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 type SongUrlService struct {

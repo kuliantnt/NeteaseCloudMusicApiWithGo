@@ -3,9 +3,11 @@ package service
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"singo/util"
+
+	"github.com/lianlian/singo/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 type LoginEmailService struct {
@@ -14,6 +16,10 @@ type LoginEmailService struct {
 	Md5password string `json:"md5_password" form:"md5_password"`
 }
 
+// LoginEmail 通过Email方式登录
+//  @receiver service 服务
+//  @param c ginContext
+//  @return map 返回值
 func (service *LoginEmailService) LoginEmail(c *gin.Context) map[string]interface{} {
 
 	// 获得所有cookie

@@ -2,10 +2,12 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"singo/util"
 	"strings"
+
+	"github.com/lianlian/singo/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 type SongDetailService struct {

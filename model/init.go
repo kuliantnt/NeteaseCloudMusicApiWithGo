@@ -1,8 +1,9 @@
 package model
 
 import (
-	"singo/util"
 	"time"
+
+	"github.com/lianlian/singo/util"
 
 	"github.com/jinzhu/gorm"
 
@@ -31,5 +32,6 @@ func Database(connString string) {
 
 	DB = db
 
+	// migration 数据迁移
 	migration()
 }

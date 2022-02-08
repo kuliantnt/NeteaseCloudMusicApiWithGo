@@ -1,9 +1,11 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"singo/util"
+
+	"github.com/lianlian/singo/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 type CommentMusicService struct {
