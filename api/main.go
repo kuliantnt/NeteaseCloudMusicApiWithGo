@@ -13,6 +13,7 @@ import (
 )
 
 // Ping 状态检查页面
+//  @param c
 func Ping(c *gin.Context) {
 	c.JSON(200, serializer.Response{
 		Code: 0,
