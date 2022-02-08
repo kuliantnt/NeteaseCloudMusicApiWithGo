@@ -22,8 +22,8 @@ func (service *LoginQrKeyService) LoginQrkey(c *gin.Context) map[string]interfac
 	cookies = append(cookies, cookiesOS)
 
 	//传递的数据
-	data := make(map[string]interface{})
-	data["type"] = 1
+	data := make(map[string]string)
+	data["type"] = "1"
 
 	options := &util.Options{
 		Crypto:  "weapi",
